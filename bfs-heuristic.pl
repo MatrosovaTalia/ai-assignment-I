@@ -3,6 +3,9 @@
    This solution is based on Alexander Cska Roque solution of
    Wumpus World game.
 
+    To run the program on a map run swipl and type 
+    run(N). where N = number of map you want to run. There are 8 different 
+    maps included into this file.
 
    Glossary:
     TD - Touchdown position
@@ -166,21 +169,6 @@
       ).
   
   
-  run30Times(N0, NF) :-
-      runManyMaps(N0,NF).
-  
-  
-  seq(From,_,From).
-  seq(From,To,X) :-
-      From<To,
-      Next is From+1,
-      seq(Next,To,X).
-  
-  loop(NWorld) :-
-      seq(1,10,_),
-      runManyMaps(NWorld,NWorld),
-      fail.
-  loop.
   
   %Removes all objects from world
   clearWorld :-
@@ -192,11 +180,11 @@
   %Clears and builds 4x4 world
   recreateWorld(N) :-
       clearWorld,
-      build4x4Walls,
+      build5x5Walls,
       buildWorld(N).
   
   %Builds 4x4 outer walls to limit world
-  build4x4Walls :-
+  build5x5Walls :-
       % left walls
       asserta(w_Wall(r(0,0))),
       asserta(w_Wall(r(0,1))),
@@ -273,6 +261,7 @@
     buildWorld(7) :-
         asserta(w_Touchdown(r(1,3))),
         asserta(w_Touchdown(r(2,2))).
+    buildWorld(8).
   
   
   runManyMaps(N0,NF) :- %Runs map N0 until NF inclusive in sequence.

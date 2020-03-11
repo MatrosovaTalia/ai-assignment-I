@@ -3,6 +3,10 @@
    This solution is based on Alexander Cska Roque solution of
    Wumpus World game.
 
+    To run the program on a map run swipl and type 
+    run(N). where N = number of map you want to run. There are 8 different 
+    maps included into this file.
+
 
    Glossary:
     TD - Touchdown position
@@ -197,30 +201,107 @@ doActions(H,S,S0) :-
     ).
 
 
-run30Times(N0, NF) :-
-    runManyMaps(N0,NF).
+ %Removes all objects from world
+ clearWorld :-
+    retractall(w_Wall(_)),
+    retractall(w_Touchdown(_)),
+    retractall(w_Human(_)),
+    retractall(w_Orc(_)).
 
+%Clears and builds 4x4 world
+recreateWorld(N) :-
+    clearWorld,
+    build5x5Walls,
+    buildWorld(N).
 
-seq(From,_,From).
-seq(From,To,X) :-
-    From<To,
-    Next is From+1,
-    seq(Next,To,X).
+%Builds 4x4 outer walls to limit world
+build5x5Walls :-
+    % left walls
+    asserta(w_Wall(r(0,0))),
+    asserta(w_Wall(r(0,1))),
+    asserta(w_Wall(r(0,2))),
+    asserta(w_Wall(r(0,3))),
+    asserta(w_Wall(r(0,4))),
+    asserta(w_Wall(r(0,5))),
+    asserta(w_Wall(r(0,6))),
+    
+    % right walls
+    asserta(w_Wall(r(6,0))),
+    asserta(w_Wall(r(6,1))),
+    asserta(w_Wall(r(6,2))),
+    asserta(w_Wall(r(6,3))),
+    asserta(w_Wall(r(6,4))),
+    asserta(w_Wall(r(6,5))),
+    asserta(w_Wall(r(6,6))),
 
-loop(NWorld) :-
-    seq(1,10,_),
-    runManyMaps(NWorld,NWorld),
-    fail.
-loop.
+    % top walls
+    asserta(w_Wall(r(1,6))),
+    asserta(w_Wall(r(2,6))),
+    asserta(w_Wall(r(3,6))),
+    asserta(w_Wall(r(4,6))),
+    asserta(w_Wall(r(5,6))),
+
+    % bottom walls
+    asserta(w_Wall(r(1,0))),
+    asserta(w_Wall(r(2,0))),
+    asserta(w_Wall(r(3,0))),
+    asserta(w_Wall(r(4,0))),
+    asserta(w_Wall(r(5,0))),
+    asserta(w_Wall(r(6,0))).
+
+  buildWorld(1) :-
+      asserta(w_Touchdown(r(2,3))),
+      asserta(w_Human(r(1,5))),
+      asserta(w_Orc(r(1,3))),
+      asserta(w_Orc(r(2,4))),
+      asserta(w_Orc(r(3,3))).
+  
+  
+  buildWorld(2) :-
+      asserta(w_Touchdown(r(4,3))),
+      asserta(w_Orc(r(3,1))),
+      asserta(w_Orc(r(3,2))),
+      asserta(w_Orc(r(3,3))),
+      asserta(w_Orc(r(2,3))),
+      asserta(w_Orc(r(2,1))).
+  
+  buildWorld(3) :-
+      asserta(w_Touchdown(r(3,3))).
+  
+  
+  buildWorld(4) :-
+      asserta(w_Touchdown(r(4,3))),
+      asserta(w_Human(r(1,3))),
+      asserta(w_Orc(r(3,1))),
+      asserta(w_Orc(r(3,2))),
+      asserta(w_Orc(r(3,3))),
+      asserta(w_Orc(r(2,3))),
+      asserta(w_Orc(r(1,3))).
+  
+  buildWorld(5) :-
+      asserta(w_Human(r(2,1))),
+      asserta(w_Human(r(2,2))),
+      asserta(w_Human(r(1,3))),
+      asserta(w_Touchdown(r(2,3))),
+      asserta(w_Human(r(1,2))).
+  
+  buildWorld(6) :-
+      asserta(w_Human(r(1,3))),
+      asserta(w_Touchdown(r(2,3))).
+  
+  buildWorld(7) :-
+      asserta(w_Touchdown(r(1,3))),
+      asserta(w_Touchdown(r(2,2))).
+  buildWorld(8).
 
 
 runManyMaps(N0,NF) :- %Runs map N0 until NF inclusive in sequence.
-    consult('fieldBuilder.pl'), %This file has information for different maps
+    % consult('fieldBuilder.pl'), %This file has information for different maps
     make, %Reset files if changed
     runInSequence(N0,NF). %Runs many maps in sequence
 
 run :-
-    consult('fieldBuilder.pl'), %This file has information for different maps
+    % consult('fieldBuilder.pl'), %This file has information for different maps
     run(1).
 
 
