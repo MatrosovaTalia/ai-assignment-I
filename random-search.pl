@@ -19,10 +19,6 @@
 % These must be dynamic so that many different worlds might be created
 % at runtime.
 
-:- abolish(w_Wall/1).
-:- abolish(w_Human/1).
-:- abolish(w_Touchdown/1).
-:- abolish(w_Orc/1).
 
 :- dynamic([
   w_Wall/1,
